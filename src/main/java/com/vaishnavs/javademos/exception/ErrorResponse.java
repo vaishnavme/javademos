@@ -1,15 +1,15 @@
 package com.vaishnavs.javademos.exception;
 
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
 public class ErrorResponse {
   private String code;
   private ErrorDetails error;
+  @Setter(AccessLevel.NONE)
   private final boolean success = false;
 
   public ErrorResponse(String code, String message) {

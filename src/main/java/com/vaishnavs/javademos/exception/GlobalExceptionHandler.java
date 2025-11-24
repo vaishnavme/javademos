@@ -20,10 +20,9 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex) {
-    System.out.println(ex.getMessage());
     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.getReasonPhrase(), ex.getMessage());
 
-    log.error(ex.getMessage() + ex.getStackTrace());
+    log.error(ex.getMessage(), ex);
 
     return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
   }
@@ -32,7 +31,7 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.BAD_REQUEST.getReasonPhrase(), ex.getMessage());
 
-    log.error(ex.getMessage() + ex.getStackTrace());
+    log.error(ex.getMessage(), ex);
 
     return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
   }
@@ -40,7 +39,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<?> handleValidationError(MethodArgumentNotValidException ex, HttpServletRequest request) {
 
-    log.error(ex.getMessage() + ex.getStackTrace());
+    log.error(ex.getMessage(), ex);
 
     Map<String, Object> extra = new HashMap<>();
 
@@ -59,16 +58,17 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ErrorResponse> handleUnauthorizedAccessException(UnauthorizedException ex) {
     ErrorResponse errorResponse = new ErrorResponse(HttpStatus.UNAUTHORIZED.getReasonPhrase(), ex.getMessage());
 
-    log.error(ex.getMessage() + ex.getStackTrace());
+    log.error(ex.getMessage(), ex);
 
     return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(Exception.class)
   public ResponseEntity<ErrorResponse> handleGlobal(Exception ex, HttpServletRequest request) {
-    ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(), ex.getMessage());
+    ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
+        "An internal server error occurred");
 
-    log.error(ex.getMessage() + ex.getStackTrace());
+    log.error("Unhandled exception occurred", ex);
 
     return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
   }
