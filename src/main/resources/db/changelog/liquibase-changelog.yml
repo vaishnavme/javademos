@@ -1,3 +1,7 @@
 databaseChangeLog:
   - include:
       file: db/changelog/v1_posts_table.xml
+  - include:
+      file: db/changelog/v2_posts_like_table.xml
+  - include:
+      file: db/changelog/v3_posts_version_table.xml
