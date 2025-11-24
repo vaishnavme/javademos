@@ -36,6 +36,9 @@ public class PostsEntity {
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
 
+  @Column(name = "likes_count", columnDefinition = "int default 0")
+  private int likesCount;
+
   @PrePersist
   protected void onCreate() {
     createdAt = LocalDateTime.now();
