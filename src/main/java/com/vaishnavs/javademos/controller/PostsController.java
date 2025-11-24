@@ -66,4 +66,33 @@ public class PostsController {
     postsService.deletePost(postId);
     return ResponseEntity.noContent().build();
   }
+
+  /**
+   * Handling concurrency.
+   * We are trying to update a post's like count concurrently by calling same
+   * endpoint multiple times (10,000 times).
+   * 
+   * If we don't handle concurrency then, we get different like counts on each run
+   * (less than 10,000).
+   * 
+   * 2 ways to handle concurrency:
+   * 
+   * 1. Optimistic Locking: Adding version field to the entity and using @Version
+   * annotation
+   * When multiple concurrent requests try to update the same post, they read the
+   * same version number, but only the first one succeeds. The others fail because
+   * the version has changed.
+   * To handle this, we can implement retry logic, but it might lead to
+   * performance issues and still throw exceptions if retries exceed. or too many
+   * concurrent requests.
+   * 
+   * 2. Pessimistic Locking: Using synchronized block or method.
+   * locks the row until transaction completes
+   */
+
+  @PutMapping("/{postId}/like")
+  public ResponseEntity<PostsEntity> likePost(@PathVariable int postId) {
+    PostsEntity likedPost = postsService.likePost(postId);
+    return ResponseEntity.ok(likedPost);
+  }
 }

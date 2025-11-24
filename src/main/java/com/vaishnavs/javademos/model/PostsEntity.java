@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,6 +39,10 @@ public class PostsEntity {
 
   @Column(name = "likes_count", columnDefinition = "int default 0")
   private int likesCount;
+
+  @Version
+  @Column(name = "version", columnDefinition = "int default 0")
+  private int version;
 
   @PrePersist
   protected void onCreate() {
